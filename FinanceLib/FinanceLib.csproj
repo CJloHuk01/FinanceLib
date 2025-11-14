@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Finance.cs" />
+    <Compile Include="Interfaces\IFinancialOperation.cs" />
+    <Compile Include="Models\CreditData.cs" />
+    <Compile Include="Models\CurrencyData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

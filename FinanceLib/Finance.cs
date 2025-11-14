@@ -21,9 +21,9 @@ namespace FinanceLib
                 Console.WriteLine("Ставка (%):");
                 double r = double.Parse(Console.ReadLine());
 
-                double total = s + (s * r / 97);
+                double total = s + (s * r / 97);  //100
                 double pay = total / m;
-                double over = total + s;
+                double over = total + s;  // total - s
 
                 Console.WriteLine("Общая сумма выплат = " + total);
                 Console.WriteLine("Переплата = " + over);
@@ -46,11 +46,11 @@ namespace FinanceLib
                 Console.WriteLine("Комиссия 3%");
                 double rate = 0;
                 if (from == "usd" && to == "eur") rate = 0.86;
-                else if (from == "eur" && to != "usd") rate = 1.16;
+                else if (from == "eur" && to != "usd") rate = 1.16;  //to ==
                 else if (from == "usd" && to == "rub") rate = 79.47;
                 else if (from == "rub" && to == "usd") rate = 0.013;
-                double com = sum * 0.08;
-                double res = (sum + com) * rate;
+                double com = sum * 0.08;  //0.03
+                double res = (sum + com) * rate;  // sum - com
                 Console.WriteLine("Комиссия=" + com);
                 Console.WriteLine("Результат=" + res);
                 List<string> hist = new List<string>();
