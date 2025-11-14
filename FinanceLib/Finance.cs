@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FinanceLib.Models;
+using FinanceLib.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,55 +10,92 @@ namespace FinanceLib
 {
     public class Finance
     {
+        private FinancialHistory _history = new FinancialHistory();
+
         public void Start()
         {
-            Console.WriteLine("1-Кредит 2-Валюта");
-            int v = int.Parse(Console.ReadLine());
-            if (v == 1)
+            while (true)
             {
-                Console.WriteLine("Сумма:");
-                double s = double.Parse(Console.ReadLine());
-                Console.WriteLine("Месяцы:");
-                int m = int.Parse(Console.ReadLine());
-                Console.WriteLine("Ставка (%):");
-                double r = double.Parse(Console.ReadLine());
+                Console.WriteLine("\n=== Финансовая библиотека ===");
+                Console.WriteLine("1 - Кредитный калькулятор");
+                Console.WriteLine("2 - Конвертер валют");
+                Console.WriteLine("3 - История операций");
+                Console.WriteLine("0 - Выход");
+                Console.Write("Выберите операцию: ");
 
-                double total = s + (s * r / 97);  //100
-                double pay = total / m;
-                double over = total + s;  // total - s
+                string choice = Console.ReadLine();
 
-                Console.WriteLine("Общая сумма выплат = " + total);
-                Console.WriteLine("Переплата = " + over);
-                Console.WriteLine("Ежемесячный платёж = " + pay);
-                Console.WriteLine("График платежей:");
-
-                for (int j = 1; j <= m; j++)
+                switch (choice)
                 {
-                    Console.WriteLine(j + " | платёж: " + pay);
+                    case "1":
+                        RunCreditCalculator();
+                        break;
+                    case "2":
+                        RunCurrencyConverter();
+                        break;
+                    case "3":
+                        _history.DisplayHistory();
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("Неверный выбор");
+                        break;
                 }
             }
-            else if (v == 2)
+        }
+
+        private void RunCreditCalculator()
+        {
+            try
             {
-                Console.WriteLine("Сумма:");
-                double sum = double.Parse(Console.ReadLine());
-                Console.WriteLine("Из валюты:");
-                string from = Console.ReadLine();
-                Console.WriteLine("В валюту:");
-                string to = Console.ReadLine();
-                Console.WriteLine("Комиссия 3%");
-                double rate = 0;
-                if (from == "usd" && to == "eur") rate = 0.86;
-                else if (from == "eur" && to != "usd") rate = 1.16;  //to ==
-                else if (from == "usd" && to == "rub") rate = 79.47;
-                else if (from == "rub" && to == "usd") rate = 0.013;
-                double com = sum * 0.08;  //0.03
-                double res = (sum + com) * rate;  // sum - com
-                Console.WriteLine("Комиссия=" + com);
-                Console.WriteLine("Результат=" + res);
-                List<string> hist = new List<string>();
-                hist.Add($"{from}->{to}: {res}");
-                foreach (var h in hist)
-                    Console.WriteLine(h);
+                var data = new CreditData();
+
+                Console.Write("Сумма кредита: ");
+                data.Amount = double.Parse(Console.ReadLine());
+
+                Console.Write("Срок (месяцев): ");
+                data.Months = int.Parse(Console.ReadLine());
+
+                Console.Write("Процентная ставка (%): ");
+                data.InterestRate = double.Parse(Console.ReadLine());
+
+                var calculator = new CreditCalculator(data);
+                string result = calculator.Execute();
+
+                Console.WriteLine("\n" + result);
+                _history.AddOperation($"Кредит: {data.Amount} руб, {data.Months} мес, {data.InterestRate}%");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+
+        private void RunCurrencyConverter()
+        {
+            try
+            {
+                var data = new CurrencyData();
+
+                Console.Write("Сумма: ");
+                data.Amount = double.Parse(Console.ReadLine());
+
+                Console.Write("Из валюты (usd, eur, rub): ");
+                data.FromCurrency = Console.ReadLine().ToLower();
+
+                Console.Write("В валюту (usd, eur, rub): ");
+                data.ToCurrency = Console.ReadLine().ToLower();
+
+                var converter = new CurrencyConverter(data);
+                string result = converter.Execute();
+
+                Console.WriteLine("\n" + result);
+                _history.AddOperation($"Конвертация: {data.Amount} {data.FromCurrency}->{data.ToCurrency}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
             }
         }
     }

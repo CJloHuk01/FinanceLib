@@ -9,9 +9,10 @@ namespace FinanceApp
 {
     class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
-            new Finance().Start();
+            var financeManager = new Finance();
+            financeManager.Start();
         }
     }
 }

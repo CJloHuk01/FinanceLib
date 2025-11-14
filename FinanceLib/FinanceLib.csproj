@@ -46,6 +46,9 @@
     <Compile Include="Models\CreditData.cs" />
     <Compile Include="Models\CurrencyData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CreditCalculator.cs" />
+    <Compile Include="Services\CurrencyConverter.cs" />
+    <Compile Include="Services\FinancialHistory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
